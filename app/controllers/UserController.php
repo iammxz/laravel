@@ -2,6 +2,8 @@
 
 class UserController extends \BaseController {
 
+
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -9,21 +11,12 @@ class UserController extends \BaseController {
 	 */
 	public function index()
 	{
-		 // return 'Hello, API';
+		$offset = Request::get('offset', 0);
+		$limit= Request::get('limit', 10);
+		$users = User::take($limit)->skip($offset)->get();
 
-		$users = User::all();
-		$total = count($users);
+		return Response::json_api(['code'=>200, 'message'=>'success'], $users, $offset, $limit);
 
-		return Response::json(array(
-	        'header' => array(
-	        	'code' => 200,
-	        	'message' => 'success'
-	        ),
-	        'total'=> $total,
-	        'users' => $users->toArray()),
-	        200
-	    );
-		
 	}
 
 	/**
